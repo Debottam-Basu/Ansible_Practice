@@ -1,0 +1,60 @@
+commands>>
+
+<on main>
+
+sudo -i
+hostnamectl set-hostname main/m1/m2
+bash
+ls
+pwd
+:wq!
+type i > to insert
+press esc> to opt out of insert mode
+ssh root @private/public IP
+
+yum install epel-release
+yum install ansible
+ansible --version
+cd/ etc/ansible
+ls
+vi hosts
+ansible all -m ping
+
+
+<on m1 & m2>
+
+passwd root
+"password:ansible"
+
+vi /etc/ssh/sshd_config
+
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication yes
+#PermitEmptyPasswords no
+#PasswordAuthentication no
+
+systemctl restart
+
+:for passwordless channel:
+
+on main>
+
+   25  ssh-keygen -t rsa
+   26  cd /root/
+   27  ls
+   28  pwd
+   29  ls
+   30  ls -a
+   31  cd .ssh/
+   32  ls
+   33  cat is_rsa
+   34  cat id_rsa
+   35  cat id_rsa.pub
+   36  ssh-copy-id root@15.207.117.10
+   37  ssh root@15.207.117.10
+
+
+examples:
+
+to create folder> ansible all -a "touch myfile"
+to delete folder> ansible all -a "rm -rf myfile"
