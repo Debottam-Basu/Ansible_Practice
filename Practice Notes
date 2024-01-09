@@ -58,3 +58,16 @@ examples:
 
 to create folder> ansible all -a "touch myfile"
 to delete folder> ansible all -a "rm -rf myfile"
+
+
+ansible adhoc commands>>
+
+ansible all -a "ls -ltr"
+ansible all -a "ls -ltr" -i inv
+ansible all -a "ls -la" -i inv
+
+
+ansible modules>>
+
+
+ansible playbooks>>
