@@ -1,0 +1,27 @@
+- name: Check server health
+ hosts: all
+ become: yes
+ gather_facts: all
+  tasks:
+    - name: Check CPU usage
+      command: "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\([0-9.]*\)%* id.*/\1/' | awk '{print 100 - $1\"%\"}'"
+      register: cpu_usage
+      failed_when: cpu_usage.stdout_lines | float > 90.0
+
+    - name: Check RAM usage
+      command: "free -m | awk 'NR==2{printf \"%.2f%%\", $3*100/$2 }'"
+      register: ram_usage
+      failed_when: ram_usage.stdout_lines | float > 90.0
+
+    - name: Check disk usage
+      command: "df -h --total | tail -1 | awk '{printf \"%s\", $5}'"
+      register: disk_usage
+      failed_when: disk_usage.stdout_lines | float > 90.0
+
+    - name: Display results
+      debug:
+        msg: |
+          CPU usage: {{ cpu_usage.stdout_lines[0] }}
+          RAM usage: {{ ram_usage.stdout_lines[0] }}
+          Disk usage: {{ disk_usage.stdout_lines[0] }}
+

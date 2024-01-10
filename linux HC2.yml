@@ -1,0 +1,32 @@
+- name: Server Health Check
+ hosts: all
+ become: yes
+ gather_facts: no
+ tasks:
+    - name: Checking CPU usage
+      ansible.builtin.shell: "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]\\\\%\\\\).*/\\\\1/\" | awk '{print 100 - $1\"%\"}'"
+      args:
+        warn: 10
+        crit: 20
+      register: cpu_usage
+      ignore_errors: yes
+
+    - name: Checking memory usage
+      ansible.builtin.shell: "free -m | awk 'NR==2{printf \"%.2f%%\", $3/$2 * 100}'"
+      args:
+        warn: 10
+        crit: 20
+      register: memory_usage
+      ignore_errors: yes
+
+    - name: Checking disk usage for /
+      ansible.builtin.shell: "df -h / | awk '$NF==\"/\"{printf \"%s\", $5}'"
+      args:
+        warn: 75%
+        crit: 90%
+      register: disk_usage
+      ignore_errors: yes
+
+    - name: Displaying the results
+      ansible.builtin.debug:
+        msg: "CPU Usage: {{ cpu_usage.stdout }} Memory Usage: {{ memory_usage.stdout }} Disk Usage: {{ disk_usage.stdout }}"
