@@ -65,6 +65,10 @@ ansible adhoc commands>>
 ansible all -a "ls -ltr"
 ansible all -a "ls -ltr" -i inv
 ansible all -a "ls -la" -i inv
+ansible -h
+cat inv
+vi inv
+
 
 
 ansible modules>>
