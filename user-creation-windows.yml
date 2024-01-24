@@ -1,0 +1,13 @@
+- name: Create a new user account on Windows
+  hosts: windows_servers
+  gather_facts: false
+  tasks:
+    - name: Create a new user
+      win_user:
+        name: '{{ new_username }}'
+        password: '{{ new_user_password }}'
+        state: present
+        groups: '{{ new_user_groups }}'
+      become: 'yes'
+      become_method: runas
+      become_user: Administrator
