@@ -1,6 +1,6 @@
 ---
 - name: Create User Account
-  hosts: your_target_machine
+  hosts: linux_servers
   become: yes # Run tasks with sudo (root) privileges
 
   vars:
